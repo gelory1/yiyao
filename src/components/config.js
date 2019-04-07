@@ -1,27 +1,31 @@
 const DataOption = {
     departs: [
         {
-            id:'erke',
+            id: 'erke',
             theme: '',
-            conversation:'',
-            name:'儿科',
-            bgm:'',
+            conversation: ['XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX','XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
+            name: '儿科',
+            bgm: '',
+            url: '../../image/erkeBJ.png'
         },
         {
-            id:'fuke',
+            id: 'fuke',
             theme: '',
-            conversation:'',
-            name:'妇科',
-            bgm:'',
+            conversation: '',
+            name: '妇科',
+            bgm: '',
+            url: '../../image/erkeBJ.png'
         },
         {
-            id:'neike',
+            id: 'pifuke',
             theme: '',
-            conversation:'',
-            name:'内科',
-            bgm:''
+            conversation: '',
+            name: '皮肤科',
+            bgm: '',
+            url: '../../image/erkeBJ.png'
         }
-    ]
+    ],
+    floorConver: ['XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX','XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
 };
 
 

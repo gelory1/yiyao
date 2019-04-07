@@ -10,11 +10,11 @@ const routes = [
         component: FoorTwo
     },
     {
-        path: '/abilityselection/:id',
+        path: '/abilityselection/:id/:step',
         component: AbilitySelection
     },
     {
-        path: '/department/:id/:ableId',
+        path: '/department/:id/:ableId/:step',
         component: Department
     },
 ]
