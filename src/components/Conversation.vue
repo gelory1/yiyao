@@ -17,7 +17,7 @@
       <div class="selectedAns">
         <input type="radio" id="contactChoice1" name="contact" value="planA" v-model="picked">
         <label for="contactChoice1">{{data.qAnd1.planA[1]}}</label>
-        <br/>
+        <br>
         <input type="radio" id="contactChoice2" name="contact" value="planB" v-model="picked">
         <label for="contactChoice2">{{data.qAnd1.planB[1]}}</label>
       </div>
@@ -27,7 +27,10 @@
       </div>
     </div>
     <div class="button" @click="contin" v-if="confirm1">{{buttonCon}}</div>
-    <audio ref="audio"></audio>
+
+    <audio v-for="index in 10" :key="index" ref="audio">
+      <source ref="source" :src="`../../audio/hushi/${index}.mp3`" type="audio/mp3">
+    </audio>
   </div>
 </template>
 <script>
@@ -42,12 +45,12 @@ export default {
       ques: "",
       confirm1: false,
       confirm2: false,
-      picked: '',
-      index:0,
+      picked: "",
+      index: 0
     };
   },
   mounted() {
-    this.animateBegin(0,this.data.converStart);
+    this.animateBegin(0, this.data.converStart);
   },
   methods: {
     animateBegin(index1, data) {
@@ -56,43 +59,32 @@ export default {
         //医生说话
         this.docCon = data[index1];
         this.daibiaoCon = "";
-      
+
         // time = 1000;
       } else {
         //代表说话
         this.daibiaoCon = data[index1];
         this.docCon = "";
-        
+
         // time = 1000;
       }
-      this.$refs.audio.src =`../../../audio/hushi/${index1+1}.mp3`;
-      this.$refs.audio.load();
-      this.$refs.audio.play();
-      let playPromise = this.$refs.audio.play()
-if (playPromise !== undefined) {
-    playPromise.then(() => {
-        this.$refs.audio.play()
-    }).catch(()=> {
-       
-    })
-}
-      
-      this.$refs.audio.addEventListener("ended",  () => { 
-         if (index1 === data.length - 1) {
+      this.$refs.audio[index1].play();
+      this.$refs.audio[index1].addEventListener("ended", () => {
+        if (index1 === data.length - 1) {
           // this.confirm1 = true;
           this.selected = true;
-          if(Object.keys(this.data).length-2 === this.index){
-            if(this.$store.state.score === 1){
+          if (Object.keys(this.data).length - 2 === this.index) {
+            if (this.$store.state.score === 1) {
               this.$store.state.success = true;
-              this.$router.push({path: '/department/erke/common/step1'});
-            }else{
-              this.$router.push({path:'/abilityselection/erke/step1'});
+              this.$router.push({ path: "/department/erke/common/step1" });
+            } else {
+              this.$router.push({ path: "/abilityselection/erke/step1" });
             }
           }
         } else {
           this.animateBegin(index1 + 1, data);
         }
-    })
+      });
 
       // setTimeout(() => {
       //   if (index1 === data.length - 1) {
@@ -115,27 +107,40 @@ if (playPromise !== undefined) {
       this.selected = true;
       this.confirm1 = false;
     },
-    answer(){
+    answer() {
       let rightAn = this.data.rightAnswer[this.index];
-      if(this.picked ===rightAn){
-        this.$store.state.score +=1;
+      if (this.picked === rightAn) {
+        this.$store.state.score += 1;
       }
-      if(this.picked === 'planA'){
-        this.index+=1;
+      if (this.picked === "planA") {
+        this.index += 1;
         this.selected = false;
         this.animateBegin(0, this.data[`qAnd${this.index}`].planA);
-      }else if(this.picked === 'planB'){
-        this.index+=1;
+      } else if (this.picked === "planB") {
+        this.index += 1;
         this.selected = false;
         this.animateBegin(0, this.data[`qAnd${this.index}`].planB);
-      }else{
-        alert('请选择回答方式！');
+      } else {
+        alert("请选择回答方式！");
       }
     }
   },
   conputed: {
     id() {
       return this.$route.params.id;
+    },
+    audioData() {
+      let data = [];
+      let length = 0;
+      for (var key in this.data) {
+        length = length + data["converStart"].length;
+        if (key.indexOf("qAnd") !== -1) {
+          length = length + data[key][0].length;
+          length = length + data[key][1].length;
+        }
+      }
+      data.length = length;
+      return data;
     }
   }
 };

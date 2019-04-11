@@ -15,7 +15,7 @@
       <div class="conver" @click="goTest()">
         <img src="../../image/jzdh.gif" class="icon">
       </div>
-      <Conversation :data="floorTwoData" v-show="converSta"></Conversation>
+      <Conversation :data="floorTwoData" v-if="converSta"></Conversation>
     </div>
   </div>
 </template>
