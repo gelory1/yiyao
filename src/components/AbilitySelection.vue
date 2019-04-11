@@ -1,11 +1,7 @@
 <template>
   <div id="ability" :style="{width:curWidth+'px',height:curHeight+'px'}">
-    <router-link class="return" to="/">
-      <div class="return"></div>
-    </router-link>
-    <router-link :to="`/department/${depart.id}/common/${stp}`">
-      <div class="common1" :style="{width:curWidth*0.8 +'px',height:curWidth*0.2 + 'px'}"></div>
-    </router-link>
+    <div @click="goHome" class="return"></div>
+    <div class="common1" @click="goTest" :style="{width:curWidth*0.8 +'px',height:curWidth*0.2 + 'px'}"></div>
 
     <router-link :to="`/department/${depart.id}/enhance/${stp}`" v-if="stp==='step2'">
       <div class="enhance1" :style="{width:curWidth*0.8 +'px',height:curWidth*0.2 + 'px'}"></div>
@@ -39,6 +35,16 @@ export default {
     var w = document.documentElement.clientWidth || document.body.clientWidth;
     this.curHeight = h; //减去页面上固定高度height
     this.curWidth = w;
+  },
+  methods:{
+    goTest(){
+      this.$store.state.floorTwoConver = true;
+      this.$router.push({path:'/'});
+    },
+    goHome(){
+       this.$store.state.floorTwoConver = false;
+      this.$router.push({path:'/'});
+    }
   }
 };
 </script>

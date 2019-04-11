@@ -1,46 +1,136 @@
 <template>
   <div class="converCon">
-    <div class="conv">
+    <div class="conv" v-if="!selected">
       <div class="daibiao"></div>
-      <div class="con1">{{daibiaoCon}}</div>
+      <div class="con1">{{docCon}}</div>
     </div>
-    <div class="conv">
+    <div class="conv" v-if="!selected">
       <div class="doctor"></div>
-      <div class="con2">{{docCon}}</div>
+      <div class="con2">{{daibiaoCon}}</div>
     </div>
-    <div class="button" @click="contin">{{buttonCon}}</div>
+    <div v-if="selected" class="selectBox">
+      <div class="img">
+        <img src="../../image/daibiao-1.png" class="imgLeft">
+        <img src="../../image/hushi-1.png" class="imgRight">
+      </div>
+      <div class="selectedQes">{{docCon}}</div>
+      <div class="selectedAns">
+        <input type="radio" id="contactChoice1" name="contact" value="planA" v-model="picked">
+        <label for="contactChoice1">{{data.qAnd1.planA[1]}}</label>
+        <br/>
+        <input type="radio" id="contactChoice2" name="contact" value="planB" v-model="picked">
+        <label for="contactChoice2">{{data.qAnd1.planB[1]}}</label>
+      </div>
+      <div class="continueBox" @click="answer">
+        <span class="buttonCon">点击继续</span>
+        <img src="../../image/jixu.png" class="continue">
+      </div>
+    </div>
+    <div class="button" @click="contin" v-if="confirm1">{{buttonCon}}</div>
+    <audio ref="audio"></audio>
   </div>
 </template>
 <script>
 export default {
-  props: ["conversation", "id"],
+  props: ["data", "id"],
   data() {
     return {
       daibiaoCon: "",
       docCon: "",
-      buttonCon: this.conversation.length === 1 ? "确定" : "点击继续"
+      buttonCon: "确定",
+      selected: false,
+      ques: "",
+      confirm1: false,
+      confirm2: false,
+      picked: '',
+      index:0,
     };
   },
   mounted() {
-    this.daibiaoCon = this.conversation[0];
-    this.docCon = this.conversation[0];
+    this.animateBegin(0,this.data.converStart);
   },
   methods: {
-    contin() {
-      let index = this.conversation.indexOf(this.daibiaoCon);
-      if (index === this.conversation.length - 1 || this.buttonCon === "确定") {
-        if (this.id) {
-          this.$router.push({ path: `/abilityselection/${this.id}/step2` });
-        }
-
-        this.$emit("closeConver");
-        return;
-      } else if (index === this.conversation.length - 2) {
-        this.buttonCon = "确定";
+    animateBegin(index1, data) {
+      // let time = 100;
+      if (index1 % 2 === 0 || index1 === 0) {
+        //医生说话
+        this.docCon = data[index1];
+        this.daibiaoCon = "";
+      
+        // time = 1000;
+      } else {
+        //代表说话
+        this.daibiaoCon = data[index1];
+        this.docCon = "";
+        
+        // time = 1000;
       }
-      this.daibiaoCon = this.conversation[index + 1];
-      this.docCon = this.conversation[index + 1];
-      //   this.converSta = data;
+      this.$refs.audio.src =`../../../audio/hushi/${index1+1}.mp3`;
+      this.$refs.audio.load();
+      this.$refs.audio.play();
+      let playPromise = this.$refs.audio.play()
+if (playPromise !== undefined) {
+    playPromise.then(() => {
+        this.$refs.audio.play()
+    }).catch(()=> {
+       
+    })
+}
+      
+      this.$refs.audio.addEventListener("ended",  () => { 
+         if (index1 === data.length - 1) {
+          // this.confirm1 = true;
+          this.selected = true;
+          if(Object.keys(this.data).length-2 === this.index){
+            if(this.$store.state.score === 1){
+              this.$store.state.success = true;
+              this.$router.push({path: '/department/erke/common/step1'});
+            }else{
+              this.$router.push({path:'/abilityselection/erke/step1'});
+            }
+          }
+        } else {
+          this.animateBegin(index1 + 1, data);
+        }
+    })
+
+      // setTimeout(() => {
+      //   if (index1 === data.length - 1) {
+      //     // this.confirm1 = true;
+      //     this.selected = true;
+      //     if(Object.keys(this.data).length-2 === this.index){
+      //       if(this.$store.state.score === 1){
+      //         this.$store.state.success = true;
+      //         this.$router.push({path: '/department/erke/common/step1'});
+      //       }else{
+      //         this.$router.push({path:'/abilityselection/erke/step1'});
+      //       }
+      //     }
+      //   } else {
+      //     this.animateBegin(index1 + 1, data);
+      //   }
+      // }, time);
+    },
+    contin() {
+      this.selected = true;
+      this.confirm1 = false;
+    },
+    answer(){
+      let rightAn = this.data.rightAnswer[this.index];
+      if(this.picked ===rightAn){
+        this.$store.state.score +=1;
+      }
+      if(this.picked === 'planA'){
+        this.index+=1;
+        this.selected = false;
+        this.animateBegin(0, this.data[`qAnd${this.index}`].planA);
+      }else if(this.picked === 'planB'){
+        this.index+=1;
+        this.selected = false;
+        this.animateBegin(0, this.data[`qAnd${this.index}`].planB);
+      }else{
+        alert('请选择回答方式！');
+      }
     }
   },
   conputed: {
@@ -52,10 +142,12 @@ export default {
 </script>
 <style>
 .converCon {
-  width: 100%;
-  height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -72,14 +164,14 @@ export default {
   position: relative;
   width: 30%;
   height: 45%;
-  background: url("../../image/daibiao8.png") no-repeat;
+  background: url("../../image/hushi.png") no-repeat;
   background-size: 100%;
 }
 .doctor {
   position: relative;
   width: 30%;
   height: 45%;
-  background: url("../../image/daibiao8.png") no-repeat;
+  background: url("../../image/daibiao.png") no-repeat;
   background-size: 100%;
   margin-left: 70%;
 }
@@ -107,6 +199,50 @@ export default {
   color: white;
   text-align: center;
   border-radius: 10px;
+}
+.selectBox {
+  width: 60%;
+  /* margin: 0 10%; */
+  padding: 10% 5%;
+  background-color: white;
+}
+.img {
+  height: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+.imgLeft,
+.imgRight {
+  width: 30%;
+}
+.imgLeft {
+  transform: translateX(15%);
+}
+.imgRight {
+  transform: translateX(-15%);
+}
+.continue {
+  width: 100%;
+}
+.buttonCon {
+  position: absolute;
+  color: white;
+  margin: 0 auto;
+}
+.selectedQes {
+  color: #0e117c;
+  font-weight: bold;
+}
+.continueBox {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.selectedAns select {
+  width: 100%;
 }
 </style>
 

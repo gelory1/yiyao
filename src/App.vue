@@ -8,8 +8,9 @@
 import routes from './router/index.js'
 import VueRouter from 'vue-router'
 import Vue from 'vue'
+import Vuex from 'vuex'
 
-
+Vue.use(Vuex)
 Vue.use(VueRouter)
 var router = new VueRouter({
   routes: routes

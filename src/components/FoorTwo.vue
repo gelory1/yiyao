@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div id="floor2Bg" :style="{width:curWidth+'px',height:curHeight+'px'}">
+    <div id="floor2Bg">
+      <img src="../../image/jingzhengXS1.png" class="fullImage">
       <router-link
         v-for="depart in departs"
         :class="depart.id"
@@ -11,8 +12,10 @@
         <div class="depart-button" v-if="depart.id==='erke'"></div>
         <!-- <div class="depart-button2" v-else></div> -->
       </router-link>
-      <div class="conver" @click="changeCon(true)"></div>
-      <Conversation :conversation="floorConver" v-if="converSta" @closeConver="changeCon(false)"></Conversation>
+      <div class="conver" @click="goTest()">
+        <img src="../../image/jzdh.gif" class="icon">
+      </div>
+      <Conversation :data="floorTwoData" v-show="converSta"></Conversation>
     </div>
   </div>
 </template>
@@ -31,22 +34,26 @@ export default {
       departs: DataOption.departs,
       curHeight: 0,
       curWidth: 0,
-      converSta: false,
-      floorConver: DataOption.floorConver
+      floorTwoData: DataOption.floorTwoData
     };
   },
   mounted() {
     // this.departs = DataOption.departs;
   },
   beforeMount() {
-    var h = document.documentElement.clientHeight || document.body.clientHeight;
-    var w = document.documentElement.clientWidth || document.body.clientWidth;
-    this.curHeight = h; //减去页面上固定高度height
-    this.curWidth = w;
+
   },
   methods: {
-    changeCon(data) {
-      this.converSta = data;
+    goTest(){
+      this.$router.push({path:`/abilityselection/erke/step1`})
+    }
+  },
+  computed:{
+    success(){
+      return this.$store.state.success;
+    },
+    converSta(){
+      return this.$store.state.floorTwoConver;
     }
   }
 };
@@ -55,11 +62,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 #floor2Bg {
-  /* background: url('@/image/') */
-  /* padding-bottom: 200%; */
-  background: url("../../image/jingzhengXS1.png") no-repeat;
-  background-size: 100%;
   position: relative;
+  overflow: hidden;
 }
 .depart {
   position: absolute;
@@ -86,13 +90,24 @@ export default {
   width: 100px;
   height: 120px;
 }
-.conver {
+#floor2Bg .conver {
   position: absolute;
-  top: 35%;
-  left: 75%;
-  width: 25%;
-  height: 30%;
-  background: url("../../image/jzdh.gif") no-repeat center;
-  background-size: 40%;
+  /* padding: 10px; */
+  top: 40%;
+  right: 0;
+}
+.icon {
+  float: right;
+  margin-right: 22%;
+  width: 40%;
+  height: auto;
+}
+.fullImage {
+  /* position: absolute; */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: auto;
+  z-index: -1;
 }
 </style>

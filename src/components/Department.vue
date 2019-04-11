@@ -17,7 +17,7 @@
     ></div>
 
     <div class="conver" @click="changeCon(true)"></div>
-    <Conversation :conversation="depart.conversation" :id="depart.id" v-if="converSta" @closeConver="changeCon(false)"></Conversation>
+    <Conversation :conversation="depart.conversation" :id="depart.id" v-if="converSta" @closeConver="closeConver"></Conversation>
   </div>
 </template>
 <script>
@@ -47,6 +47,9 @@ export default {
     },
     stp(){
         return this.$route.params.step;
+    },
+    score(){
+      return this.$store.state.score;
     }
   },
   beforeMount() {
@@ -58,6 +61,10 @@ export default {
   methods: {
     changeCon(data) {
       this.converSta = data;
+    },
+    closeConver(){
+      this.changeCon(false);
+      this.router.push({path:`/abilityselection/${this.depart.id}/${this.stp}`});
     }
   }
 };
@@ -68,7 +75,7 @@ export default {
   background-size: 100%;
   position: relative;
 }
-.conver {
+.depart-container .conver {
   position: absolute;
   top: 48%;
   left: 20%;
