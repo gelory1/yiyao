@@ -17,7 +17,7 @@
     ></div>
 
     <div class="conver" @click="changeCon(true)"></div>
-    <Conversation :conversation="depart.conversation" :id="depart.id" v-if="converSta" @closeConver="closeConver"></Conversation>
+    <Conversation :data="depart.converData" :id="depart.id" v-if="converSta"></Conversation>
   </div>
 </template>
 <script>
