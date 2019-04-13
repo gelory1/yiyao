@@ -1,5 +1,6 @@
 <template>
   <div class="depart-container" :style="{width:curWidth+'px',height:curHeight+'px'}">
+    <img src="../../image/erkeBJ.png" class="fullPage"/>
     <router-link class="return" :to="`/abilityselection/${depart.id}/${stp}`">
       <div class="return"></div>
     </router-link>
@@ -71,8 +72,6 @@ export default {
 </script>
 <style>
 .depart-container {
-  background: url("../../image/erkeBJ.png") no-repeat;
-  background-size: 100%;
   position: relative;
 }
 .depart-container .conver {

@@ -1,5 +1,6 @@
 <template>
   <div id="ability" :style="{width:curWidth+'px',height:curHeight+'px'}">
+    <img src="../../image/erketigaoBJ.jpg" class="fullPage"/>
     <div @click="goHome" class="return"></div>
     <div class="common1" @click="goTest" :style="{width:curWidth*0.8 +'px',height:curWidth*0.2 + 'px'}"></div>
 
@@ -39,22 +40,30 @@ export default {
   methods:{
     goTest(){
       this.$store.state.floorTwoConver = true;
-      this.$router.push({path:'/'});
+      if(this.$store.state.success){
+        this.$router.push({path:'/department/erke/common/step1'});
+      }else{
+        this.$router.push({path:'/lesson1'});
+      }
     },
     goHome(){
-       this.$store.state.floorTwoConver = false;
-      this.$router.push({path:'/'});
+      this.$store.state.floorTwoConver = false;
+      this.$router.push({path:'/lesson1'});
     }
   }
 };
 </script>
 <style>
 #ability {
-  background: url("../../image/erketigaoBJ.jpg") no-repeat;
-  background-size: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.fullPage{
+  position: absolute;
+  width: 100%;
+  z-index: -1;
 }
 .return{
     align-self: flex-start;
@@ -63,8 +72,9 @@ export default {
     height: 50px;
 }
 .common1 {
-  margin-top: 68%;
-  background: url("../../image/shuipinCS.gif") no-repeat center;
+  padding-top:10%;
+  margin-top: 58%;
+  background: url("../../image/shuipingCS.gif") no-repeat center;
   background-size: 100%;
 }
 .enhance1 {

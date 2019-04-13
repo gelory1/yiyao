@@ -15,20 +15,24 @@
         <img src="../../image/hushi-1.png" v-if="!id" class="imgRight">
         <img src="../../image/erkenanZR-1.png" v-if="id==='erke'" class="imgRight">
       </div>
-      <div class="selectedQes">{{docCon}}</div>
-      <div class="selectedAns">
-        <input type="radio" id="contactChoice1" name="contact" value="planA" v-model="picked">
-        <label for="contactChoice1">{{data[`qAnd${index+1}`].planA[0]}}</label>
-        <br>
-        <input type="radio" id="contactChoice2" name="contact" value="planB" v-model="picked">
-        <label for="contactChoice2">{{data[`qAnd${index+1}`].planB[0]}}</label>
+      <div class="qAndA">
+        <div class="selectedQes">{{docQes}}</div>
+        <div class="selectedAns">
+          <input type="radio" id="contactChoice1" name="contact" value="planA" v-model="picked">
+          <label for="contactChoice1">{{data[`qAnd${index+1}`].planA[0]}}</label>
+          <br>
+          <input type="radio" id="contactChoice2" name="contact" value="planB" v-model="picked">
+          <label for="contactChoice2">{{data[`qAnd${index+1}`].planB[0]}}</label>
+        </div>
       </div>
+
       <div class="continueBox" @click="answer">
         <span class="buttonCon">点击继续</span>
         <img src="../../image/jixu.png" class="continue">
       </div>
     </div>
     <div class="button" @click="contin" v-if="confirm1">{{buttonCon}}</div>
+    <button class="nextButton" v-if="!selected" @click="next">下一步</button>
 
     <audio ref="audio1">
       <source ref="source" src="../../audio/hushi/1.mp3" type="audio/mp3">
@@ -145,7 +149,9 @@ export default {
       confirm1: false,
       confirm2: false,
       picked: "",
-      index: 0
+      index: 0,
+      lastTime: false,
+      docQes:""
     };
   },
   mounted() {
@@ -153,7 +159,17 @@ export default {
   },
   methods: {
     animateBegin(index1, data, index2) {
-      
+      if (Object.keys(this.data).length - 2 === this.index) {
+        this.lastTime = true;
+      } else {
+        this.lastTime = false;
+      }
+      if(index2 === 0){
+        this.docQes = this.data.converStart[this.data.converStart.length-1];
+      }else{
+        console.log(1111);
+        this.docQes = this.data[`qAnd${index2}`][`${this.picked}`][this.data[`qAnd${index2}`][`${this.picked}`].length-1];
+      }
       if (index2 === 0) {
         if (index1 % 2 === 0 || index1 === 0) {
           //医生说话
@@ -185,22 +201,8 @@ export default {
             if (index1 === data.length - 1) {
               // this.confirm1 = true;
               this.selected = true;
-              this.picked =""
-              if (Object.keys(this.data).length - 2 === this.index) {
-                if (this.$store.state.success) {
-                  if (this.$store.state.score > 0 && this.id) {
-                    this.$router.push({
-                      path: "/abilityselection/erke/step2"
-                    });
-                  } else {
-                    this.$router.push({
-                      path: "/department/erke/common/step1"
-                    });
-                  }
-                } else {
-                  this.$router.push({ path: "/abilityselection/erke/step1" });
-                }
-              }
+              this.picked = "";
+              this.lastTimeGo();
             } else {
               this.animateBegin(index1 + 1, data, index2);
             }
@@ -208,6 +210,7 @@ export default {
         );
       } else if (index2 > 0 && this.picked === "planB") {
         this.$refs[`${id}audio${index1 + 1}${index2}b`].play();
+
         this.$refs[`${id}audio${index1 + 1}${index2}b`].addEventListener(
           "ended",
           () => {
@@ -215,22 +218,8 @@ export default {
             if (index1 === data.length - 1) {
               // this.confirm1 = true;
               this.selected = true;
-              this.picked =""
-              if (Object.keys(this.data).length - 2 === this.index) {
-                if (this.$store.state.success) {
-                  if (this.$store.state.score > 0) {
-                    this.$router.push({
-                      path: "/department/erke/common/step2"
-                    });
-                  } else {
-                    this.$router.push({
-                      path: "/department/erke/common/step1"
-                    });
-                  }
-                } else {
-                  this.$router.push({ path: "/abilityselection/erke/step1" });
-                }
-              }
+              this.picked = "";
+              this.lastTimeGo();
             } else {
               this.animateBegin(index1 + 1, data, index2);
             }
@@ -241,18 +230,8 @@ export default {
         this.$refs[`${id}audio${index1 + 1}`].addEventListener("ended", () => {
           if (index1 === data.length - 1) {
             this.selected = true;
-              this.picked =""
-            if (Object.keys(this.data).length - 2 === this.index) {
-              if (this.$store.state.success) {
-                if (this.$store.state.score > 0) {
-                  this.$router.push({ path: "/department/erke/common/step2" });
-                } else {
-                  this.$router.push({ path: "/department/erke/common/step1" });
-                }
-              } else {
-                this.$router.push({ path: "/abilityselection/erke/step1" });
-              }
-            }
+            this.picked = "";
+            this.lastTimeGo();
           } else {
             this.animateBegin(index1 + 1, data, index2);
           }
@@ -279,6 +258,36 @@ export default {
         this.animateBegin(0, this.data[`qAnd${this.index}`].planB, this.index);
       } else {
         alert("请选择回答方式！");
+      }
+    },
+    lastTimeGo() {
+      if (this.lastTime) {
+        if (this.$store.state.success) {
+          if (this.id) {
+            this.$router.push({
+              path: "/abilityselection/erke/step2"
+            });
+          } else {
+            this.$router.push({
+              path: "/department/erke/common/step1"
+            });
+          }
+        } else {
+          this.$router.push({ path: "/abilityselection/erke/step1" });
+        }
+      }
+    },
+    next() {
+      if (this.lastTime) {
+        this.lastTimeGo();
+      } else {
+        let audioArr = document.getElementsByTagName("audio");
+        for (var i = 0; i < audioArr.length; i++) {
+          audioArr[i].pause();
+        }
+        this.picked = "";
+      
+        this.selected = true;
       }
     }
   },
@@ -312,7 +321,7 @@ export default {
   right: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 }
 .conv {
@@ -321,6 +330,7 @@ export default {
   background-color: white;
   border-radius: 5px;
   position: relative;
+  margin-top: 10%;
 }
 .daibiao {
   position: relative;
@@ -339,17 +349,19 @@ export default {
   width: 60%;
   height: 50%;
   position: absolute;
-  left: 25%;
+  left: 30%;
   top: 20%;
   word-wrap: break-word;
+  overflow: auto;
 }
 .con2 {
   width: 60%;
   height: 50%;
   position: absolute;
-  right: 25%;
+  right: 30%;
   top: 20%;
   word-wrap: break-word;
+  overflow: auto;
 }
 .button {
   width: 80%;
@@ -362,9 +374,14 @@ export default {
 }
 .selectBox {
   width: 60%;
-  /* margin: 0 10%; */
+  height: 50%;
   padding: 10% 5%;
   background-color: white;
+}
+.qAndA {
+  height: 62%;
+  overflow-y: scroll;
+  margin-bottom: 5%;
 }
 .img {
   height: auto;
@@ -396,10 +413,20 @@ export default {
   font-weight: bold;
 }
 .continueBox {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.nextButton {
+  position: absolute;
+  bottom: 5%;
+  right: 10%;
+  border: none;
+  background-color: #10abd6;
+  color: white;
+  padding: 2% 4%;
+  border-radius: 5%;
+  outline: none;
 }
 .selectedAns select {
   width: 100%;

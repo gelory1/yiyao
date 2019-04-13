@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div id="floor2Bg">
+    <div id="floor2Bg" :style="{width:curWidth+'px',height:curHeight+'px'}">
+      <div class="return" @click="goLesson"> </div>
       <img src="../../image/jingzhengXS1.png" class="fullImage">
       <router-link
         v-for="depart in departs"
@@ -40,12 +41,18 @@ export default {
   mounted() {
     // this.departs = DataOption.departs;
   },
-  beforeMount() {
-
+   beforeMount() {
+    var h = document.documentElement.clientHeight || document.body.clientHeight;
+    var w = document.documentElement.clientWidth || document.body.clientWidth;
+    this.curHeight = h; //减去页面上固定高度height
+    this.curWidth = w;
   },
   methods: {
     goTest(){
-      this.$router.push({path:`/abilityselection/erke/step1`})
+      this.$router.push({path:`/abilityselection/erke/step1`});
+    },
+    goLesson(){
+      this.$router.push({path:'/lesson'});
     }
   },
   computed:{
