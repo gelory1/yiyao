@@ -80,7 +80,7 @@ export default {
   left: 20%;
   width: 35%;
   height: 40%;
-  background: url("../../image/jzdh2.gif") no-repeat center;
+  background: url("../../image/jzdh-2.gif") no-repeat center;
   background-size: 40%;
 }
 

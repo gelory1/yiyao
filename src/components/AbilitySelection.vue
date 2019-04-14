@@ -2,12 +2,18 @@
   <div id="ability" :style="{width:curWidth+'px',height:curHeight+'px'}">
     <img src="../../image/erketigaoBJ.jpg" class="fullPage"/>
     <div @click="goHome" class="return"></div>
-    <div class="common1" @click="goTest" :style="{width:curWidth*0.8 +'px',height:curWidth*0.2 + 'px'}"></div>
+    <div class="common1" @click="goTest">
+      <img src="../../image/shuipingCS.gif" />
+    </div>
 
     <router-link :to="`/department/${depart.id}/enhance/${stp}`" v-if="stp==='step2'">
-      <div class="enhance1" :style="{width:curWidth*0.8 +'px',height:curWidth*0.2 + 'px'}"></div>
+      <div class="enhance1">
+        <img src="../../image/tigaoXL.gif"/>
+      </div>
     </router-link>
-    <div class="enhance1" :style="{width:curWidth*0.8 +'px',height:curWidth*0.2 + 'px'}" v-if="stp==='step1'"></div>
+    <div class="enhance1" v-if="stp==='step1'">
+      <img class="gif" src="../../image/tigaoXL.png"/>
+    </div>
   </div>
 </template>
 <script>
@@ -72,15 +78,23 @@ export default {
     height: 50px;
 }
 .common1 {
-  padding-top:10%;
+  width: 100%;
   margin-top: 58%;
-  background: url("../../image/shuipingCS.gif") no-repeat center;
-  background-size: 100%;
+}
+.common1 img{
+  width: 80%;
+  margin: 0 10%;
 }
 .enhance1 {
-  margin-top: 5%;
-  background: url("../../image/tigaoXL.gif") no-repeat center;
-  background-size: 100%;
+  width: 100%;
+  margin: 0 10%;
+}
+.enhance1 img{
+  width: 80%;
+  
+}
+.enhance1 img.gif{
+  margin: 0 10%;
 }
 </style>
 

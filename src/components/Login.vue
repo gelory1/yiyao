@@ -112,6 +112,7 @@ export default {
   outline: none;
   line-height: 20px;
   padding: 0 5%;
+  font-size: 18px;
 }
 .loginBox img {
   width: 18px;
@@ -133,6 +134,7 @@ export default {
   color: white;
   padding: 1% 3%;
   border-radius: 20px;
+  font-size: 18px;
 }
 .loginButton {
   margin: 0 10%;

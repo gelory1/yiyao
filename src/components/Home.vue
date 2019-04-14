@@ -7,7 +7,7 @@
         <img class="avatar" :src="require(`../../image/${isLogin?'avatar-icon':'btn_home'}.png`)">
       </div>
       <div class="swiperBox">
-        <swiper :options="swiperOption" autoplay="true" class="wiper">
+        <swiper :options="swiperOption" class="wiper">
           <swiper-slide v-for="(slide, index) in swiperSlides" :key="index">
             <img :src="require(`../../image/Carousel${index+1}.png`)" class="tabImage">
           </swiper-slide>
@@ -57,7 +57,8 @@ export default {
       swiperOption: {
         pagination: {
           el: ".swiper-pagination"
-        }
+        },
+        autoplay: true,
       },
       swiperSlides: [1, 2, 3, 4, 5]
     };
@@ -122,7 +123,7 @@ export default {
   font-size: 20px;
 }
 .swiperBox {
-  width: 79%;
+  width: 100%;
   margin: 4% 0;
   display: flex;
   justify-content: center;
@@ -150,6 +151,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 18px;
 }
 .iconBox img {
   width: 60px;
@@ -162,6 +164,7 @@ export default {
   padding-left: 10px;
   align-self: flex-start;
   position: relative;
+  font-size: 25px;
 }
 .abilitys::before {
   position: absolute;
@@ -169,7 +172,7 @@ export default {
   content: "";
   display: block;
   width: 5px;
-  height: 16px;
+  height: 32px;
   border-radius: 5px;
   background-color: white;
 }

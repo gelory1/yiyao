@@ -1,13 +1,14 @@
 <template>
   <div class="converCon">
+    <div @click="goHome" class="return1"></div>
     <div class="conv" v-if="!selected">
       <img class="daibiao" v-if="!id" src="../../image/hushi.png">
       <img class="daibiao" v-if="id==='erke'" src="../../image/erkenanZR.png">
       <div class="con1">{{docCon}}</div>
     </div>
     <div class="conv" v-if="!selected">
-      <img class="doctor" src="../../image/daibiao.png">
-      <div class="con2">{{daibiaoCon}}</div>
+      <img class="daibiao" src="../../image/daibiao.png">
+      <div class="con1">{{daibiaoCon}}</div>
     </div>
     <div v-if="selected" class="selectBox">
       <div class="img">
@@ -19,10 +20,10 @@
         <div class="selectedQes">{{docQes}}</div>
         <div class="selectedAns">
           <input type="radio" id="contactChoice1" name="contact" value="planA" v-model="picked">
-          <label for="contactChoice1">{{data[`qAnd${index+1}`].planA[0]}}</label>
+          <label for="contactChoice1">A、{{data[`qAnd${index+1}`].planA[0]}}</label>
           <br>
           <input type="radio" id="contactChoice2" name="contact" value="planB" v-model="picked">
-          <label for="contactChoice2">{{data[`qAnd${index+1}`].planB[0]}}</label>
+          <label for="contactChoice2">B、{{data[`qAnd${index+1}`].planB[0]}}</label>
         </div>
       </div>
 
@@ -289,6 +290,13 @@ export default {
       
         this.selected = true;
       }
+    },
+    goHome(){
+      if(this.$route.path === '/lesson1'|| this.$route.path === '/department/erke/common/step1'){
+        this.$router.push({path: '/abilityselection/erke/step1'});
+      }else{
+        this.$router.push({path: '/abilityselection/erke/step2'});
+      }
     }
   },
   conputed: {
@@ -345,23 +353,45 @@ export default {
   background-size: 100%;
   margin-left: 70%;
 }
-.con1 {
+.con1,.con2 {
   width: 60%;
-  height: 50%;
+  height: 53%;
   position: absolute;
-  left: 30%;
   top: 20%;
   word-wrap: break-word;
   overflow: auto;
+  font-size: 18px;
+}
+.con1::-webkit-scrollbar-track-piece,.con2::-webkit-scrollbar-track-piece,.qAndA::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0);
+  border-left: 1px solid rgba(0, 0, 0, 0);
+}
+.con1::-webkit-scrollbar,.con2::-webkit-scrollbar,.qAndA::-webkit-scrollbar {
+  width: 5px;
+  height: 13px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.con1::-webkit-scrollbar-thumb,.con2::-webkit-scrollbar-thumb,.qAndA::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  background-clip: padding-box;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  min-height: 28px;
+}
+.con1::-webkit-scrollbar-thumb:hover,.con2::-webkit-scrollbar-thumb:hover,.qAndA::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+.con1{
+  left: 30%;
 }
 .con2 {
-  width: 60%;
-  height: 50%;
-  position: absolute;
   right: 30%;
-  top: 20%;
-  word-wrap: break-word;
-  overflow: auto;
 }
 .button {
   width: 80%;
@@ -373,15 +403,16 @@ export default {
   border-radius: 10px;
 }
 .selectBox {
-  width: 60%;
-  height: 50%;
-  padding: 10% 5%;
+  width: 70%;
+  height: 52%;
+  padding: 5%;
   background-color: white;
 }
 .qAndA {
   height: 62%;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin-bottom: 5%;
+  font-size: 19px;
 }
 .img {
   height: auto;
@@ -416,6 +447,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 20px;
 }
 .nextButton {
   position: absolute;
@@ -427,9 +459,18 @@ export default {
   padding: 2% 4%;
   border-radius: 5%;
   outline: none;
+  font-size: 20px;
 }
 .selectedAns select {
   width: 100%;
+}
+.return1{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  z-index: 2;
 }
 </style>
 
