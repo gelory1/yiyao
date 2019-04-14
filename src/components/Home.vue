@@ -1,10 +1,10 @@
 <template>
-  <div class="home" :style="{width:curWidth+'px',height:curHeight+'px'}">
+  <div class="home" :style="{width:curWidth+'px',height:curHeight+'px'}" @click="goLogin">
     <img class="fullImage" src="../../image/home_background.png">
     <div class="content" :style="{width:curWidth+'px',height:curHeight+'px'}">
       <div class="titleBox">
         <div class="title">中药配方颗粒云学堂</div>
-        <img class="avatar" src="../../image/avatar-icon.png">
+        <img class="avatar" :src="require(`../../image/${isLogin?'avatar-icon':'btn_home'}.png`)">
       </div>
       <div class="swiperBox">
         <swiper :options="swiperOption" autoplay="true" class="wiper">
@@ -71,11 +71,21 @@ export default {
   computed: {
     swiper() {
       return this.$refs.mySwiper.swiper;
+    },
+    isLogin(){
+        return this.$store.state.isLogin;
     }
   },
   methods: {
     goAbility() {
-      this.$router.push({ path: "/lesson" });
+      if (this.$store.state.isLogin) {
+        this.$router.push({ path: "/lesson" });
+      }
+    },
+    goLogin() {
+      if (!this.$store.state.isLogin) {
+        this.$router.push({ path: "/login" });
+      }
     }
   }
 };
@@ -177,8 +187,8 @@ export default {
 .fButton2 {
   position: relative;
 }
-.fButton1{
-    margin-bottom: 4%;
+.fButton1 {
+  margin-bottom: 4%;
 }
 .footer img {
   width: 100%;

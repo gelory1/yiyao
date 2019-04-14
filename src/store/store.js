@@ -5,7 +5,8 @@ let store = {
     state: {
         success: false,
         score: 0,
-        floorTwoConver: false
+        floorTwoConver: false,
+        isLogin: false
     }
 }
 
